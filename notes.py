@@ -20,3 +20,16 @@
 # -> MiddleWare again authenticates and then checks the session key and encrypts the payload and sends it to the client.
 # -> client will then read the JSON response and decrypts the received data and display to the user 
 # 
+# 
+# 2) Identify where middleware sits in this cycle. Name two built-in Django middleware classes and describe what each does.
+# 
+# -> MiddleWare sits between the URL Router and Views. While a request arrives it authenticates and sends to URl Router and to recevies the response
+# from views and then again authenticates, ensures security enforces like use fo HTTPS are there and then veirfies the session key and then sends the
+# JSON response
+# 
+# Two Built-in Django MiddleWare
+# 
+# 1) django.contrib.auth.middleware.AuthenticationMiddleware - It checks if user logged in has a valid session key and adds user object
+# to the request
+# 2) django.contrib.auth.security.SecurityMiddleware - It enforces HTTPS(TLS/SSL Encryption) and adds x-content-type-options and x-xss-protection
+# It protects against most common attacks, it adds http headers to the responses from views.
