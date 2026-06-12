@@ -1,0 +1,1 @@
+# This __int__.py tells that coursemanager/coursemanager folder is a package

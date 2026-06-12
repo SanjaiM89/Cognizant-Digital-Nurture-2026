@@ -72,3 +72,24 @@
 # * V(view) -> It handles request and response logic, it is responsible for getting the http request and get the values/data from
 #               model and render, serialize the data to display to user.
 # * T(Template) -> It is the presentation layer, the html page. It uses Django's Template Language(DTL) for dynamic contents
+# 
+# 
+"""
+Task 2, 
+
+Step 6
+
+Difference between Django Project and the Django App
+
+Django Project :-
+
+-> It is the overall project that has the database, application, url patterns, and the apps configuration
+-> It consists of multiple different apps all uses same configuration.
+-> It is created using django-admin startproject <name_of_the_project>
+Django App :-
+
+-> It is a module that performs sepcific functions and operations in a whole application in Django Project.
+-> It is reusable and performs specific task or functions
+-> It is created using python manage.py startapp <app_name>
+
+"""
