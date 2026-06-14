@@ -3,8 +3,9 @@ from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, viewsets
-from .models import Course
-from .serializers import course_serializer
+from .models import Course, Student, Enrollment
+from .serializers import course_serializer, student_serializer, enrollment_serializer
+from rest_framework.decorators import action
 
 def hello_view(request):
     return HttpResponse("Course Management API is running")
@@ -59,3 +60,21 @@ def hello_view(request):
 class CourseViewset(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = course_serializer
+
+    @action(detail=True, methods=['get'])
+    def students(self,request,pk=None):
+        course = self.get_object()
+        enroll = Enrollment.objects.filter(course=course)
+        std = []
+        for en in enroll:
+            std.append(en.student)
+        ser = student_serializer(std,many=True)
+        return Response(ser.data)
+
+class StudentViewset(viewsets.ModelViewSet):
+    queryset = Student.objects.all()
+    serializer_class = student_serializer
+
+class EnrollmentViewset(viewsets.ModelViewSet):
+    queryset = Enrollment.objects.all()
+    serializer_class = enrollment_serializer

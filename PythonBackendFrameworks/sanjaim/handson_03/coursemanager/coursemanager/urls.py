@@ -33,5 +33,5 @@ from courses import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/hello',views.hello_view),
-    path('api/courses/',include('courses.urls'))
+    path('api/',include('courses.urls'))
 ]
