@@ -132,18 +132,6 @@ footer {
     padding: 20px;
 }
 
-@media (min-width:700px) {
-    nav ul {
-        flex-direction: row;
-    }
-    .course-grid{
-        grid-template-columns: repeat(2,1fr);
-    }
-    .stats-bar{
-        flex-direction: row;
-    }
-}
-
 @media (min-width:1024px) {
     header{
         flex-direction: row;
@@ -152,4 +140,31 @@ footer {
     .course-grid{
         grid-template-columns: repeat(3,1fr);
     }
+}
+
+nav {
+    display:none;
+}
+.hamburger{
+    display: block;
+    font-size:1.2rem;
+    cursor:pointer;
+}
+
+@media(min-width:768px){
+        nav{
+            display: block;
+        }
+        .hamburger{
+            display: none;
+        }
+        nav ul{ 
+            flex-direction: row;
+        }
+        .course-grid{
+            grid-template-columns: repeat(2,1fr);
+        }
+        .stats-bar{
+            flex-direction: row;
+        }
 }
