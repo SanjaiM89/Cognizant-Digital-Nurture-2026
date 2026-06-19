@@ -138,7 +138,7 @@ footer {
         justify-content: space-between;
     }
     .course-grid{
-        grid-template-columns: repeat(3,1fr);
+        grid-template-columns: repeat(3,1fr) !important;
     }
     #hero {
         padding: 150px 40px;
