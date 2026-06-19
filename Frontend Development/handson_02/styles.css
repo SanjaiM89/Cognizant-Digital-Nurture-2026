@@ -140,6 +140,9 @@ footer {
     .course-grid{
         grid-template-columns: repeat(3,1fr);
     }
+    #hero {
+        padding: 150px 40px;
+    }
 }
 
 nav {
