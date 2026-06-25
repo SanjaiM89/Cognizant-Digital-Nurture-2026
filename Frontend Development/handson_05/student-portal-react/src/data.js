@@ -1,0 +1,8 @@
+const course_data = [
+    {id:1,name:"Data Structures",code:"CS101",credits:3,grade:"A"},
+    {id:2,name:"DataMining",code:"CS102",credits:3,grade:"B"},
+    {id:3,name:"Compiler Design",code:"CS103",credits:3,grade:"D"},
+    {id:4,name:"Mobile App development",code:"CS104",credits:2,grade:"C"},
+]
+
+export default course_data
