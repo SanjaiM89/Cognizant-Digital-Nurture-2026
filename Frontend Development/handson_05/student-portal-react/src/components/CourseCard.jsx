@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CourseCard = ({ name, code, credits, grade }) => {
+const CourseCard = ({ name, code, credits, grade, onEnroll }) => {
     return (
         <div style={styles.card}>
             <div style={styles.header}>
@@ -12,11 +12,24 @@ const CourseCard = ({ name, code, credits, grade }) => {
                 <p style={styles.text}><strong>Credits:</strong> {credits}</p>
                 <p style={styles.badge}><strong>Grade:</strong> {grade}</p>
             </div>
+            <button style={styles.button} onClick={onEnroll}>Enroll</button>
         </div>
     );
 };
 
 const styles = {
+    button:{
+        backgroundColor: '#6b7280',
+        color: '#ffffff',
+        padding: '6px 12px',
+        fontSize: '16px',
+        fontWeight: 600,
+        border: 'none',
+        borderRadius: '4px',
+        cursor: 'pointer',
+        transition: 'background-color 0.2s ease',
+        marginTop: '15px'
+    },
     card: {
         border: '1px solid #e0e0e0',
         borderRadius: '8px',

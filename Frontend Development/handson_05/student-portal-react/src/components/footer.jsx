@@ -16,7 +16,7 @@ const styles = {
   footer: {
     backgroundColor: '#333',
     color: '#fff',
-    position: 'fixed',
+    margineTop:'auto',
     left: 0,
     bottom: 0,
     textAlign: 'center',
