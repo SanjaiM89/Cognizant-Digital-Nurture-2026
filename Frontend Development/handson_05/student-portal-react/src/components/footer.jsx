@@ -13,7 +13,7 @@ const Footer = () => {
 };
 
 const styles = {
-  footer: {
+  footer:{
     backgroundColor: '#333',
     color: '#fff',
     margineTop:'auto',

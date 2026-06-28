@@ -1,11 +1,36 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Header from './components/header'
 import Footer from './components/footer'
 import Course from './components/CourseCard'
-import course_d from './data'
-
+{/*import course_d from './data'*/ }
+import StudentProfile from './components/StudentProfile'
 function App(){
-    const [course_,setCourse_data] = useState(course_d);
+  const [course_, setCourse_data] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/posts")
+      .then((response) => response.json())
+      .then((data) => {
+        const courses = data.map((post) => ({
+          id: post.id,
+          name: post.name,
+          code: post.code,
+          credits: post.credits,
+          grade: post.grade
+        }));
+        setCourse_data(courses);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
+  useEffect(() => {
+    // This is the dependency Array and runs whenever the state course_ changes. This helps to prevent it from running after every render
+    console.log("Course Updated")
+  }, [course_]);
     const [search,setSearch] = useState('')
     const filteredCourses = course_.filter((course)=>{
         return course.name.toLowerCase().includes(search.toLowerCase());
@@ -23,9 +48,16 @@ function App(){
             alert("Already Enrolled")
         }
     }
+  if (loading) {
+    return <h2>Loading.....</h2>
+  }
+  if (error) {
+    return <h2 style={{ color: "red" }}>{error}</h2>
+  }
     return (
         <div>
-            <Header title="Student Poral" enrollCount={enrollCourse.length}/>
+        <Header title="Student Poral" enrollCount={enrollCourse.length} />
+        <StudentProfile />
             <main>
                 <h2>Courses</h2>
                 <input
