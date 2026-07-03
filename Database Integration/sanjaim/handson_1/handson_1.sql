@@ -88,6 +88,10 @@ Storing department name in student table will violate the 3NF rules
 
 /*
  Task 3: Alter and Extend the Schema
-
-
 */
+
+alter table students add column phone_number varchar(15);
+alter table courses add column max_seats int default 60;
+alter table enrollments add constraint check_enrollement_grade check (grade in ('A','B','C','D','F') or grade is null);
+alter table departments rename column hod_name to head_of_dept;
+alter table students drop phone_number;
