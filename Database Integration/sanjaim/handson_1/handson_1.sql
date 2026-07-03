@@ -1,3 +1,4 @@
+#  Task 1: Create the Database and Tables
 create table students (
 student_id int primary key auto_increment,
 first_name varchar(50) not null,
@@ -61,12 +62,18 @@ Task 2: Verify Normalisation
 -> Mixing data types in the same column is not allowed
 If the multiple phone number is stored in one filed it would violate the 1NF rules of every column having atomic values.
 All the tables satisfy the 1NF Rules
+    - All the tables courses, departments, enrollments,professors and students has primary key
+    - And no columns in table stored multiple values in same column every column has atomic vlaues
 
 2NF:-
 -> The tables must satisfy the 1NF condition
 -> Every non key attributes must depend on the primary key column
 -> Partial Dependency is not allowed
 In the enrollment table enrollment_date and grade depend on the enrollment of a student in a course. They do not depend only on student_id or only on course_id so enrollment table satisfies 2NF
+    - There is primary key in columns in enrollment_id
+    - All columns student_id, course_id, enrollment_date and grade are depend on the primary key
+    enrollment_id
+    - There is no partial dependency all the columns are dependened on the student_id column
 
 3NF:-
 -> It must satisfy 2NF condition
@@ -77,6 +84,10 @@ The schema violates 3NF
 
 In Student Table, student_id is the primaru key and department name is depends on the department_id which is not primary key in student table
 Storing department name in student table will violate the 3NF rules
+*/
+
+/*
+ Task 3: Alter and Extend the Schema
 
 
 */
