@@ -159,3 +159,203 @@ college_nosql>
  college_nosql
  
  ```
+
+**  Task 2: CRUD Operations **
+
+ ** 65. READ: Find all feedback documents where rating is 5. **
+
+ ```
+ db.feedback.find({rating:5})
+ {
+   _id: ObjectId('6a4e67fda029b2b3f8dee433'),
+   student_id: 2,
+   course_code: 'CS101',
+   semester: '2026-ODD',
+   rating: 5,
+   comments: 'Best course this semester, very clear explanations.',
+   tags: [
+     'well-structured',
+     'engaging'
+   ],
+   submitted_at: 2026-11-30T11:00:00.000Z,
+   attachments: [
+     {
+       filename: 'name1.pdf',
+       size_kb: 85
+     }
+   ]
+ }
+ {
+   _id: ObjectId('6a4e67fda029b2b3f8dee436'),
+   student_id: 5,
+   course_code: 'CS102',
+   semester: '2026-EVEN',
+   rating: 5,
+   comments: 'Loved the hands-on labs and project work.',
+   tags: [
+     'hands-on',
+     'well-structured',
+     'good-examples'
+   ],
+   submitted_at: 2026-05-15T16:45:00.000Z,
+   attachments: [
+     {
+       filename: 'name4.pdf',
+       size_kb: 512
+     }
+   ]
+ }
+ {
+   _id: ObjectId('6a4e67fda029b2b3f8dee43a'),
+   student_id: 9,
+   course_code: 'CS105',
+   semester: '2026-ODD',
+   rating: 5,
+   comments: 'Instructor was very approachable and helpful.',
+   tags: [
+     'engaging',
+     'well-structured'
+   ],
+   submitted_at: 2026-11-27T13:15:00.000Z,
+   attachments: [
+     {
+       filename: 'name8.pdf',
+       size_kb: 210
+     }
+   ]
+ }
+ college_nosql
+ 
+ 
+
+ ```
+
+ ** 66. READ: Find feedback for course CS101 where the tags array contains 'challenging'. Use $elemMatch or a simple array value query. **
+
+```
+db.feedback.find({course_code:'CS101',tags:'challenging'})
+{
+  _id: ObjectId('6a4e67fda029b2b3f8dee432'),
+  student_id: 1,
+  course_code: 'CS101',
+  semester: '2026-ODD',
+  rating: 4,
+  comments: 'Excellent teaching. Would recommend.',
+  tags: [
+    'challenging',
+    'well-structured',
+    'good-examples'
+  ],
+  submitted_at: 2026-11-30T10:15:00.000Z,
+  attachments: [
+    {
+      filename: 'name.pdf',
+      size_kb: 240
+    }
+  ]
+}
+{
+  _id: ObjectId('6a4e67fda029b2b3f8dee434'),
+  student_id: 3,
+  course_code: 'CS101',
+  semester: '2026-EVEN',
+  rating: 2,
+  comments: 'Pace was too fast, hard to keep up with assignments.',
+  tags: [
+    'challenging',
+    'fast-paced'
+  ],
+  submitted_at: 2026-05-14T09:30:00.000Z,
+  attachments: [
+    {
+      filename: 'name2.pdf',
+      size_kb: 120
+    }
+  ]
+}
+college_nosql
+```
+
+** 67. READ: Retrieve only the student_id, course_code, and rating fields (projection) for all documents —
+exclude _id. **
+
+```
+db.feedback.find({},{student_id:1, course_code:1, rating:1, _id:0})
+{
+  student_id: 1,
+  course_code: 'CS101',
+  rating: 4
+}
+{
+  student_id: 2,
+  course_code: 'CS101',
+  rating: 5
+}
+{
+  student_id: 3,
+  course_code: 'CS101',
+  rating: 2
+}
+{
+  student_id: 4,
+  course_code: 'CS102',
+  rating: 3
+}
+{
+  student_id: 5,
+  course_code: 'CS102',
+  rating: 5
+}
+{
+  student_id: 6,
+  course_code: 'CS103',
+  rating: 1
+}
+{
+  student_id: 7,
+  course_code: 'CS104',
+  rating: 4
+}
+{
+  student_id: 8,
+  course_code: 'CS101',
+  rating: 3
+}
+{
+  student_id: 9,
+  course_code: 'CS105',
+  rating: 5
+}
+{
+  student_id: 10,
+  course_code: 'CS102',
+  rating: 2
+}
+{
+  student_id: 11,
+  course_code: 'CS101',
+  rating: 4
+}
+college_nosql
+
+
+
+```
+
+** 68. UPDATE: For all feedback documents with rating < 3, add a field needs_review: true using
+updateMany and $set. **
+
+```
+db.feedback.updateMany({rating:{$lt: 3}},{$set:{needs_review:true}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 3,
+  modifiedCount: 3,
+  upsertedCount: 0
+}
+college_nosql
+
+
+![ss](screenshots/Screenshot_20260708_211035.png)
+```
