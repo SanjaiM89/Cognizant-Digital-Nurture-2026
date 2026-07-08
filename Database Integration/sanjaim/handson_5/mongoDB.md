@@ -357,5 +357,6 @@ db.feedback.updateMany({rating:{$lt: 3}},{$set:{needs_review:true}})
 college_nosql
 
 
-![ss](screenshots/Screenshot_20260708_211035.png)
+
 ```
+![ss](screenshots/Screenshot_20260708_211035.png)
