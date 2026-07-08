@@ -164,7 +164,7 @@ college_nosql>
 
  65. READ: Find all feedback documents where rating is 5.
 
- ```
+ ```javascript
  db.feedback.find({rating:5})
  {
    _id: ObjectId('6a4e67fda029b2b3f8dee433'),
@@ -232,7 +232,7 @@ college_nosql>
 
  66. READ: Find feedback for course CS101 where the tags array contains 'challenging'. Use $elemMatch or a simple array value query.
 
-```
+```javascript
 db.feedback.find({course_code:'CS101',tags:'challenging'})
 {
   _id: ObjectId('6a4e67fda029b2b3f8dee432'),
@@ -279,7 +279,7 @@ college_nosql
 67. READ: Retrieve only the student_id, course_code, and rating fields (projection) for all documents —
 exclude _id.
 
-```
+```javascript
 db.feedback.find({},{student_id:1, course_code:1, rating:1, _id:0})
 {
   student_id: 1,
@@ -345,7 +345,7 @@ college_nosql
 68. UPDATE: For all feedback documents with rating < 3, add a field needs_review: true using
 updateMany and $set.
 
-```
+```javascript
 db.feedback.updateMany({rating:{$lt: 3}},{$set:{needs_review:true}})
 {
   acknowledged: true,
@@ -365,7 +365,7 @@ college_nosql
 69. UPDATE: Push a new tag 'reviewed' into the tags array of all documents where needs_review is true,
 using $push
 
-```
+```javascript
 db.feedback.updateMany({needs_review:true},{$push:{tags:'reviewed'}})
 {
   acknowledged: true,
@@ -383,7 +383,7 @@ college_nosql
 
 70. DELETE: Delete all feedback documents where the semester is '2021-EVEN'.
 
-```
+```javascript
 db.feedback.deleteMany({semester:'2021-EVEN'})
 {
   acknowledged: true,
@@ -393,3 +393,44 @@ college_nosql
 
 ```
 ![ss](screenshots/3.png)
+
+ **Task 3: Aggregation Pipeline**
+
+71. Write a pipeline that: (Stage 1) filters to semester '2022-ODD'; (Stage 2) groups by course_code
+calculating average rating and total feedback count; (Stage 3) sorts by average rating descending.
+
+ ```javascript
+ db.feedback.aggregate([
+   {$match:{semester:'2022-ODD'}},
+   {
+     $group:{
+       _id:'$course_code',
+       avg_rating:{$avg:'$rating'},
+       total_feedback:{$sum: 1}
+     }
+   },
+   {
+     $sort:{avg_salary:-1}
+   },
+   {
+     $project:{
+       _id:0,
+       course_code:'$id',
+       avg_salary:{$round:['$avg_rating',1]},
+       total_feedback:1
+     }
+   }
+ ])
+ {
+   total_feedback: 2,
+   avg_salary: 4.5
+ }
+ {
+   total_feedback: 1,
+   avg_salary: 2
+ }
+ college_nosql
+
+ ```
+
+ ![ss](screenshots/4.png)
