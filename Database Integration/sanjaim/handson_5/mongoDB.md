@@ -1,5 +1,5 @@
 
-'''
+```
 test> use college_nosql
 switched to db college_nosql
 college_nosql> d.createCollection('feedback')
@@ -14,10 +14,10 @@ local           72.00 KiB
 college_nosql> show collections
 feedback
 college_nosql> 
-'''
+```
  **Task 1: Create the Collection and Insert Documents**
 
- ''' javascript
+ ``` javascript
  use college_nosql
  switched to db college_nosql
  db["feedback"].find()
@@ -158,6 +158,4 @@ college_nosql>
  11
  college_nosql
  
- 
-
- '''
+ ```
