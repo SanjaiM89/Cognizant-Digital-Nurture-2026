@@ -160,9 +160,9 @@ college_nosql>
  
  ```
 
-**  Task 2: CRUD Operations **
+**Task 2: CRUD Operations**
 
- ** 65. READ: Find all feedback documents where rating is 5. **
+ 65. READ: Find all feedback documents where rating is 5.
 
  ```
  db.feedback.find({rating:5})
@@ -230,7 +230,7 @@ college_nosql>
 
  ```
 
- ** 66. READ: Find feedback for course CS101 where the tags array contains 'challenging'. Use $elemMatch or a simple array value query. **
+ 66. READ: Find feedback for course CS101 where the tags array contains 'challenging'. Use $elemMatch or a simple array value query.
 
 ```
 db.feedback.find({course_code:'CS101',tags:'challenging'})
@@ -276,8 +276,8 @@ db.feedback.find({course_code:'CS101',tags:'challenging'})
 college_nosql
 ```
 
-** 67. READ: Retrieve only the student_id, course_code, and rating fields (projection) for all documents —
-exclude _id. **
+67. READ: Retrieve only the student_id, course_code, and rating fields (projection) for all documents —
+exclude _id.
 
 ```
 db.feedback.find({},{student_id:1, course_code:1, rating:1, _id:0})
@@ -342,8 +342,8 @@ college_nosql
 
 ```
 
-** 68. UPDATE: For all feedback documents with rating < 3, add a field needs_review: true using
-updateMany and $set. **
+68. UPDATE: For all feedback documents with rating < 3, add a field needs_review: true using
+updateMany and $set.
 
 ```
 db.feedback.updateMany({rating:{$lt: 3}},{$set:{needs_review:true}})
@@ -360,3 +360,36 @@ college_nosql
 
 ```
 ![ss](screenshots/Screenshot_20260708_211035.png)
+
+
+69. UPDATE: Push a new tag 'reviewed' into the tags array of all documents where needs_review is true,
+using $push
+
+```
+db.feedback.updateMany({needs_review:true},{$push:{tags:'reviewed'}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 3,
+  modifiedCount: 3,
+  upsertedCount: 0
+}
+college_nosql
+
+
+
+```
+![ss](screenshots/2.png)
+
+70. DELETE: Delete all feedback documents where the semester is '2021-EVEN'.
+
+```
+db.feedback.deleteMany({semester:'2021-EVEN'})
+{
+  acknowledged: true,
+  deletedCount: 0
+}
+college_nosql
+
+```
+![ss](screenshots/3.png)
