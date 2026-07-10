@@ -434,3 +434,220 @@ calculating average rating and total feedback count; (Stage 3) sorts by average 
  ```
 
  ![ss](screenshots/4.png)
+
+ 72. Extend the pipeline with a $project stage to rename avg_rating to average_rating and round it to 1 decimal place using $round.
+
+ ```
+ db.feedback.aggregate([
+    {$match:{semester:'2022-ODD'}},
+    {
+      $group:{
+        _id:'$course_code',
+        avg_rating:{$avg:'$rating'},
+        total_feedback:{$sum: 1}
+      }
+    },
+    {
+      $sort:{avg_salary:-1}
+    },
+    {
+      $project:{
+        _id:0,
+        course_code:'$id',
+        avg_salary:{$round:['$average_rating',1]},
+        total_feedback:1
+      }
+    }
+  ])
+ {
+   total_feedback: 2,
+   avg_salary: null
+ }
+ {
+   total_feedback: 1,
+   avg_salary: null
+ }
+ college_nosql
+ 
+ ```
+
+  ![ss](screenshots/5.png)
+
+
+73. Write a pipeline that uses $unwind on the tags array, then $group by tag to count how many times
+each tag appears. Sort by count descending — a tag frequency leaderboard.
+
+```
+db.feedback.aggregate([
+  {$unwind : '$tags'},
+  {$group:{
+  _id:'$tags',
+    count:{$sum:1}
+  }},
+{
+  $sort:{count:-1}
+},
+{
+  $project:{
+    _id:0,
+      tag:'$_id',
+      count:1
+  }
+}
+])
+{
+  count: 5,
+  tag: 'well-structured'
+}
+{
+  count: 3,
+  tag: 'good-examples'
+}
+{
+  count: 3,
+  tag: 'reviewed'
+}
+{
+  count: 3,
+  tag: 'engaging'
+}
+{
+  count: 2,
+  tag: 'challenging'
+}
+{
+  count: 2,
+  tag: 'average'
+}
+{
+  count: 1,
+  tag: 'balanced'
+}
+{
+  count: 1,
+  tag: 'repetitive'
+}
+{
+  count: 1,
+  tag: 'disorganized'
+}
+{
+  count: 1,
+  tag: 'unclear-grading'
+}
+{
+  count: 1,
+  tag: 'fast-paced'
+}
+{
+  count: 1,
+  tag: 'needs-update'
+}
+{
+  count: 1,
+  tag: 'outdated'
+}
+{
+  count: 1,
+  tag: 'hands-on'
+}
+{
+  count: 1,
+  tag: 'needs-examples'
+}
+college_nosql
+
+
+
+```
+![ss](screenshots/6.png)
+![ss](screenshots/7.png)
+
+
+74. Add an index on course_code and verify its usage with
+db.feedback.find({course_code:'CS101'}).explain('executionStats') — confirm the stage shows
+IXSCAN not COLLSCAN.
+
+```
+db.feedback.createIndex({course_code:1})
+course_code_1
+db.feedback.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { course_code: 1 }, name: 'course_code_1' }
+]
+db.feedback.find({course_code:'CS101'}).explain('executionStats')
+{
+      alreadyHasObj: 0,
+      inputStage: {
+        stage: 'IXSCAN',
+        nReturned: 5,
+        executionTimeMillisEstimate: 0,
+        works: 6,
+        advanced: 5,
+        needTime: 0,
+        needYield: 0,
+        saveState: 0,
+        restoreState: 0,
+        isEOF: 1,
+        keyPattern: {
+          course_code: 1
+        },
+        indexName: 'course_code_1',
+        isMultiKey: false,
+        multiKeyPaths: {
+          course_code: []
+        },
+        isUnique: false,
+        isSparse: false,
+        isPartial: false,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: {
+          course_code: [
+            '["CS101", "CS101"]'
+          ]
+        },
+        keysExamined: 5,
+        seeks: 1,
+        dupsTested: 0,
+        dupsDropped: 0
+      }
+    }
+  },
+  queryShapeHash: 'A93905E9C9869DA0264D6D85BC8875D4C698F973B857E2ABAAA6A355A5FCF0CB',
+  command: {
+    find: 'feedback',
+    filter: {
+      course_code: 'CS101'
+    },
+    '$db': 'college_nosql'
+  },
+  serverInfo: {
+    host: '54b5510d6dcd',
+    port: 27017,
+    version: '8.2.11',
+    gitVersion: 'ee01d36638a00a07a6aa42ee80a125890f11aeed'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeRestricted',
+    internalQueryPlannerIgnoreIndexWithCollationForRegex: 1
+  },
+  ok: 1
+}
+college_nosql
+
+```
+![ss](screenshots/8.png)
+![ss](screenshots/9.png)
+![ss](screenshots/10.png)
+![ss](screenshots/11.png)
+![ss](screenshots/12.png)
