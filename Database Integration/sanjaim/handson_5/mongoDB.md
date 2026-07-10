@@ -437,7 +437,7 @@ calculating average rating and total feedback count; (Stage 3) sorts by average 
 
  72. Extend the pipeline with a $project stage to rename avg_rating to average_rating and round it to 1 decimal place using $round.
 
- ```
+ ```javascript
  db.feedback.aggregate([
     {$match:{semester:'2022-ODD'}},
     {
@@ -477,7 +477,7 @@ calculating average rating and total feedback count; (Stage 3) sorts by average 
 73. Write a pipeline that uses $unwind on the tags array, then $group by tag to count how many times
 each tag appears. Sort by count descending — a tag frequency leaderboard.
 
-```
+```javascript
 db.feedback.aggregate([
   {$unwind : '$tags'},
   {$group:{
@@ -568,7 +568,7 @@ college_nosql
 db.feedback.find({course_code:'CS101'}).explain('executionStats') — confirm the stage shows
 IXSCAN not COLLSCAN.
 
-```
+```javascript
 db.feedback.createIndex({course_code:1})
 course_code_1
 db.feedback.getIndexes()
