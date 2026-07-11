@@ -32,10 +32,12 @@ class Department(Base):
     __tablename__ = 'departments'
 
     department_id = Column(Integer, primary_key=True, autoincrement=True)
+    dept_name = Column(String(100), nullable=True,unique=True)
     head_of_dept = Column(String(100), nullable=True, unique=True)
     budget = Column(Numeric(precision=10, scale=2), nullable=True)
     students = relationship("Student", back_populates="department")
     professors = relationship("Professor", back_populates="department")
+    courses = relationship("Course", back_populates="department")
 
 class Student(Base):
     __tablename__ = 'students'
