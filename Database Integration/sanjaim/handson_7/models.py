@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, text, Column, Integer, String, Float, Date, ForeignKey, Numeric, CHAR, Index
+from sqlalchemy import create_engine, text, Column, Integer, String, Float, Date, ForeignKey, Numeric, CHAR, Index, Boolean, Time
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy.exc import OperationalError
@@ -49,7 +49,7 @@ class Student(Base):
     date_of_birth = Column(Date, nullable=True)
     department_id = Column(Integer, ForeignKey('departments.department_id'),nullable=True)
     enrollment_year = Column(Integer, nullable=True)
-
+    is_active = Column(Boolean, default=True)
     department = relationship("Department", back_populates="students")
     enrollments = relationship("Enrollment", back_populates="student")
 
@@ -92,7 +92,16 @@ class Course(Base):
     __table_args__ = (
         Index('idx_course_code', 'course_code'),
     )
+    
+class CourseSchedule(Base):
+    __tablename__ = 'course_schedules'
 
+    schedule_id = Column(Integer, primary_key = True, autoincrement=True)
+    course_id = Column(Integer, ForeignKey('courses.course_id'),nullable=False)
+    day_of_week = Column(String(15), nullable=False)
+    start_time = Column(Time, nullable=False)
+    end_time = Column(Time, nullable=False)
+    
 if __name__ == "__main__":
     engine = get_engine()
     Base.metadata.create_all(engine)
