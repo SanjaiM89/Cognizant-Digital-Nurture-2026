@@ -1,3 +1,14 @@
+'''
+90. Compare the two outputs and document the difference in a comment block at the top of crud.py
+-> without using joinedload we will be using session.query(Enrollment).all() that will fetch all enrollments, now in the fo loop accessing
+enrollment.student and enrollment.course will trigger another two additional queries per enrollment. This creates a N+1 problem. It is not using any
+join queries
+-> Using Joinedload
+ joinedload(Enrollment.student), joinedload(Enrollment.course) will modify the sql queries to use left outer join this fetches all enrollments and the
+ realted student and course details in one query
+'''
+
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, joinedload
 from models import Base, Department, Student, Professor, Course, Enrollment
