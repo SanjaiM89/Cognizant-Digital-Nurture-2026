@@ -96,3 +96,28 @@ Path: /home/sanjai/Desktop/cognizant/Database Integration/sanjaim/handson_7/migr
 
 (venv) [sanjai@sanjai handson_7]$
 ```
+
+**Task 3: Rollback and Recovery**
+
+```
+(venv) [sanjai@sanjai handson_7]$ alembic current
+INFO  [alembic.runtime.migration] Context impl MySQLImpl.
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+296feb363211 (head)
+(venv) [sanjai@sanjai handson_7]$ alembic downgrade -1
+INFO  [alembic.runtime.migration] Context impl MySQLImpl.
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.runtime.migration] Running downgrade 296feb363211 -> 0a7788ce2c93, added course model
+(venv) [sanjai@sanjai handson_7]$ alembic downgrade base
+INFO  [alembic.runtime.migration] Context impl MySQLImpl.
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.runtime.migration] Running downgrade 0a7788ce2c93 -> 06c01391e4ef, add iis_active to students
+INFO  [alembic.runtime.migration] Running downgrade 06c01391e4ef -> , initial schema
+(venv) [sanjai@sanjai handson_7]$ alembic upgrade head
+INFO  [alembic.runtime.migration] Context impl MySQLImpl.
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 06c01391e4ef, initial schema
+INFO  [alembic.runtime.migration] Running upgrade 06c01391e4ef -> 0a7788ce2c93, add iis_active to students
+INFO  [alembic.runtime.migration] Running upgrade 0a7788ce2c93 -> 296feb363211, added course model
+(venv) [sanjai@sanjai handson_7]$
+```
