@@ -38,9 +38,12 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+import os
+import time
 
 options = Options()
-options.add_argument('--headless')
+#options.add_argument('--headless')
 driver = webdriver.Chrome(options=options)
 
 # Implicit wait applies globally to EVERY element lookup for the entire
@@ -57,5 +60,26 @@ driver = webdriver.Chrome(options=options)
 driver.implicitly_wait(10)
 driver.get("https://www.lambdatest.com/selenium-playground/")
 
+driver.find_element(By.LINK_TEXT, "Simple Form Demo").click()
+assert "simple-form-demo" in driver.current_url
+print("True")
 print(driver.title)
+
+driver.execute_script('window.open("https://www.google.com");')
+print(driver.window_handles)
+driver.switch_to.window(driver.window_handles[1])
+print(driver.title)
+
+driver.switch_to.window(driver.window_handles[0])
+driver.save_screenshot("step_30_screenshot.png")
+
+print("Current Window Size: ",driver.get_window_size())
+driver.set_window_size(1280,800)
+print("New Window Size: ",driver.get_window_size())
+
+# A consistent window size is important because responsive websites
+# change their layout based on the browser dimensions. Using the same
+# window size for every test ensures elements appear in the same
+# location, making UI automation reliable and repeatable.
+
 driver.quit()
