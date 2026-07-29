@@ -1,5 +1,9 @@
 from passlib.context import CryptContext
+import os
 
+secret_key = os.environ.get("SECRET_KEY", "mysecretkey")
+algorithm = os.environ.get("ALGORITHM", "HS256")
+acess_token_expire_minutes = int(os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 

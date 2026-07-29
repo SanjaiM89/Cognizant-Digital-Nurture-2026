@@ -4,3 +4,4 @@ sqlalchemy
 aiosqlite
 pydantic
 passlib[bcrypt]
+python-jose[cryptography]

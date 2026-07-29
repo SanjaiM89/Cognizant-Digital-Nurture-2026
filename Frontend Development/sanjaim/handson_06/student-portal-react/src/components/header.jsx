@@ -1,21 +1,24 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
-const Header = (props) =>{
-return(
-  <header style={styles.header}>
-    <h1 style={styles.title}>{props.title}</h1>
-    <div style={styles.hamburger}> =Menu </div>
-    <nav style={styles.nav}>
-      <ul style={styles.navList}>
-        <li><Link to="/" style={styles.link}>Home</Link></li>
-        <li><Link to="/courses" style={styles.link}>Courses</Link></li>
-        <li><Link to="/profile" style={styles.link}>Profile</Link></li>
-        <li style={styles.enrolled}>Enrolled Course: {props.enrollCount}</li>
-      </ul>
-    </nav>
-  </header>
-)
+const Header = (props) => {
+  const enrollCount = useSelector((state) => state.enrollment.enrolledCourses.length)
+
+  return (
+    <header style={styles.header}>
+      <h1 style={styles.title}>{props.title}</h1>
+      <div style={styles.hamburger}> =Menu </div>
+      <nav style={styles.nav}>
+        <ul style={styles.navList}>
+          <li><Link to="/" style={styles.link}>Home</Link></li>
+          <li><Link to="/courses" style={styles.link}>Courses</Link></li>
+          <li><Link to="/profile" style={styles.link}>Profile</Link></li>
+          <li style={styles.enrolled}>Enrolled Course: {enrollCount}</li>
+        </ul>
+      </nav>
+    </header>
+  )
 }
 
 const styles = {
