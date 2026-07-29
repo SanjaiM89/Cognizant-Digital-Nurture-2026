@@ -1,0 +1,241 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2c3e50;
+    color: #fff;
+    flex-direction: column;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-direction: column;
+}
+
+nav a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    padding: 8px 12px;
+    transition: background-color 0.3s ease;
+}
+
+nav a:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+
+#hero {
+    text-align: center;
+    padding: 100px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 40vh;
+}
+
+header h1 {
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+#hero h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+#hero p {
+    margin-bottom: 20px;
+}
+
+#hero button {
+    padding: 12px 30px;
+    border: 2px solid #2c3e50;
+    border-radius: 4px;
+    background-color: #2c3e50;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+}
+
+#hero button:hover {
+    background-color: transparent;
+    color: #2c3e50;
+}
+.course-card {
+    padding: 20px;
+    border: 1px solid blue;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    min-height: 200px;
+    align-self: stretch;
+    cursor: pointer;
+    transition: all 1.3s ease;
+}
+
+.course-card:hover {
+    background-color: blue;
+    color: white;
+}
+
+.course-card .credits {
+    color: inherit;
+    font-weight: bold;
+}
+
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+#notifications {
+    padding: 20px 40px;
+}
+
+.notifications-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.notifications-controls button,
+.notifications-body button {
+    padding: 8px 20px;
+    border: 2px solid #2c3e50;
+    border-radius: 4px;
+    background-color: #2c3e50;
+    color: #fff;
+    cursor: pointer;
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+}
+
+.notifications-controls button:hover,
+.notifications-body button:hover {
+    background-color: transparent;
+    color: #2c3e50;
+}
+
+.notification-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.notification-card {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.notification-card h4 {
+    margin-bottom: 8px;
+    text-transform: capitalize;
+}
+
+.loading-spinner {
+    color: #666;
+}
+
+.error-message {
+    color: #c0392b;
+    margin-bottom: 10px;
+}
+
+.stats-bar {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 30px 20px;
+    background-color: #2c3e50;
+    color: #fff;
+    flex: 1;
+    flex-direction: column;
+}
+
+.stat-item {
+    flex: 1;
+    text-align: center;
+}
+
+.stat-item h3 {
+    font-size: 1.8rem;
+    margin-bottom: 4px;
+}
+
+.stat-item p {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
+}
+
+footer {
+    text-align: center;
+    font-style: italic;
+    padding: 20px;
+}
+
+@media (min-width: 1024px) {
+    header {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .course-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+    #hero {
+        padding: 150px 40px;
+    }
+}
+
+nav {
+    display: none;
+}
+.hamburger {
+    display: block;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+@media (min-width: 768px) {
+    nav {
+        display: block;
+    }
+    .hamburger {
+        display: none;
+    }
+    nav ul {
+        flex-direction: row;
+    }
+    .course-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .stats-bar {
+        flex-direction: row;
+    }
+}

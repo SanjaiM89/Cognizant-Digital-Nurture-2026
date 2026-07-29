@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./styles.css">
+        <title>Student Portal</title>
+    </head>
+    <body>
+        <header>
+            <h1>Student Portal</h1>
+            <div class="hamburger"> = Menu </div>
+            <nav>
+                <ul>
+                    <li><a href="#hero">Home</a></li>
+                    <li><a href="#course">Courses</a></li>
+                    <li><a href="#notifications">Notifications</a></li>
+                    <li><a href="#profile">Profile</a></li>
+                    <li><a href="#grades">Grades</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <section id="hero">
+                <h2>Welcome to the Student Portal</h2>
+                <p>This is the Student portal</p>
+                <button type="button">Explore Courses</button>
+            </section>
+
+            <section id="course">
+                <h2>Courses</h2>
+                <div class="course-grid"></div>
+            </section>
+
+            <section id="notifications">
+                <h2>Notifications</h2>
+                <div class="notifications-controls">
+                    <button type="button" id="reload-notifications">Reload</button>
+                    <button type="button" id="simulate-error">Simulate Error</button>
+                </div>
+                <div class="notifications-body"></div>
+            </section>
+
+            <section class="stats-bar">
+                <div class="stat-item">
+                    <h3>3</h3>
+                    <p>Courses Enrolled</p>
+                </div>
+                <div class="stat-item">
+                    <h3>3.8</h3>
+                    <p>GPA</p>
+                </div>
+                <div class="stat-item">
+                    <h3>6</h3>
+                    <p>Semester</p>
+                </div>
+            </section>
+        </main>
+        <footer>
+            <p>Student Portal</p>
+        </footer>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script type="module" src="./js/app.js"></script>
+    </body>
+</html>
