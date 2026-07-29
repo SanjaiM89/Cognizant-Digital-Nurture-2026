@@ -43,8 +43,8 @@ import os
 import time
 
 options = Options()
-#options.add_argument('--headless')
-driver = webdriver.Chrome(options=options)
+options.add_argument('--headless')
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
 # Implicit wait applies globally to EVERY element lookup for the entire
 # driver session, not just the ones that actually need it. This means:

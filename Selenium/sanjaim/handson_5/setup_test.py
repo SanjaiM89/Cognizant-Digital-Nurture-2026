@@ -37,6 +37,9 @@ print("Found using tag name", using_tag_name)
 using_xpath = driver.find_element(By.XPATH, "/html/body/div[1]/div/main/div/section[2]/div/div/div/div[1]/div[2]/div/div[1]/input")
 print("Found using xpath", using_xpath)
 
+using_xpath_relative = driver.find_element(By.XPATH, "//input[@id='user-message']")
+print("Found using relative xpath", using_xpath_relative)
+
 
 element1_by_id = driver.find_element(By.CSS_SELECTOR, "#user-message")
 print("CSS by ID: ",element1_by_id)
@@ -171,9 +174,9 @@ Comment:
   visibility_of_element_located already passed.
 """
 
-driver.get("https://www.testmuai.com/selenium-playground/table-data-download-demo/")
-search_box = driver.find_element(By.CSS_SELECTOR, "input[type='search']")
-search_box.send_keys("Abraham")
+driver.get("https://www.testmuai.com/selenium-playground/table-search-filter-demo/")
+search_box = driver.find_element(By.ID, "task-table-filter")
+search_box.send_keys("Ricky")
 
 fluent_wait = WebDriverWait(
     driver,
@@ -184,13 +187,13 @@ fluent_wait = WebDriverWait(
 
 row = fluent_wait.until(
     lambda d: d.find_element(
-        By.XPATH, "//table//td[contains(text(),'Abraham')]/.."
+        By.XPATH, "//table[@id='task-table']//td[contains(text(),'Ricky')]/.."
     )
 )
 
 print("Row found:", row.text)
-assert "Abraham" in row.text
-print("Test Case Passed: Abraham row located via FluentWait")
+assert "Ricky" in row.text
+print("Test Case Passed: Ricky row located via FluentWait")
 
 """
 Comment:
