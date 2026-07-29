@@ -4,6 +4,8 @@ from typing import Optional, List
 from fastapi import FastAPI, Depends, HTTPException, BackgroundTasks, Request, Response, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import select, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -13,9 +15,9 @@ from schemas import (
     CourseCreate, CourseUpdate, CourseResponse,
     StudentCreate, StudentUpdate, StudentResponse,
     EnrollmentCreate, EnrollmentResponse,
-    UserRegister, UserResponse,
+    UserRegister, UserResponse, Token,
 )
-from security import get_password_hash
+from security import get_password_hash, verify_password, create_access_token, get_current_user
 
 EMAIL_REGEX = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
@@ -24,6 +26,14 @@ app = FastAPI(
     description='REST API for managing departments, courses, students and enrollments.',
     version='1.0.0',
     contact={'name': 'Sanjai M', 'email': 'sanjaim899@gmail.com'},
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['http://localhost:3000'],
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
 )
 
 
@@ -101,6 +111,30 @@ async def register_user(user_data: UserRegister, db: AsyncSession = Depends(get_
     return new_user
 
 
+# OAuth2 Authorization Code flow vs the JWT login below:
+# Authorization Code flow is for third-party apps acting on a user's behalf
+# without ever seeing their password: the user is redirected to the auth
+# server, logs in there, and the server redirects back with a short-lived
+# code; the app then exchanges that code (plus a client secret, server-side)
+# for an access token. It involves a browser redirect, a client_id/secret,
+# and usually a refresh token.
+# The login below is simpler and first-party only: the client sends email +
+# password directly to this API in exchange for a JWT. No redirect, no
+# separate authorization server, no client secret — appropriate here because
+# this API is both the resource server and the identity owner.
+@app.post('/api/v1/auth/login/', response_model=Token, tags=['Auth'])
+async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)):
+    email = form_data.username.strip().lower()
+    result = await db.execute(select(User).where(User.email == email))
+    user = result.scalar_one_or_none()
+
+    if not user or not verify_password(form_data.password, user.hashed_password):
+        raise_api_error(status.HTTP_401_UNAUTHORIZED, 'UNAUTHORIZED', 'Incorrect email or password')
+
+    access_token = create_access_token({'sub': user.email})
+    return {'access_token': access_token, 'token_type': 'bearer'}
+
+
 # Courses
 # Versioning ->  URL versioning uses explicit paths such as /api/v1/courses/, while
 # header-based versioning keeps the URL stable and sends version info in headers such as
@@ -114,7 +148,12 @@ async def register_user(user_data: UserRegister, db: AsyncSession = Depends(get_
     summary='Create a new course',
     response_description='The created course',
 )
-async def create_course(course: CourseCreate, response: Response, db: AsyncSession = Depends(get_db)):
+async def create_course(
+    course: CourseCreate,
+    response: Response,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
     new_course = Course(**course.model_dump())
     db.add(new_course)
     await db.commit()
@@ -188,7 +227,11 @@ async def patch_course(course_id: int, course_update: CourseUpdate, db: AsyncSes
 
 
 @app.delete('/api/v1/courses/{course_id}', status_code=status.HTTP_204_NO_CONTENT, tags=['Courses'])
-async def delete_course(course_id: int, db: AsyncSession = Depends(get_db)):
+async def delete_course(
+    course_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
     result = await db.execute(select(Course).where(Course.id == course_id))
     course = result.scalar_one_or_none()
     if not course:
