@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from courses.models import db, Course
+from courses.models import db, Course, Enrollment
 
 courses_bp = Blueprint("courses", __name__, url_prefix="/api/courses")
 
@@ -10,22 +10,12 @@ def make_response_json(data, status_code):
 
 @courses_bp.route('/', methods=['GET'])
 def get_courses():
-    result = []
     courses = Course.query.all()
-
-    for course in courses:
-        result.append({
-            "id": course.id,
-            "name": course.name,
-            "code": course.code,
-            "credits": course.credits,
-            "department_id": course.department_id
-        })
-    return make_response_json(result, 200)
+    return make_response_json([course.to_dict() for course in courses], 200)
 
 
 @courses_bp.route('/', methods=['POST'])
-def add_courses():
+def add_course():
     data = request.get_json()
 
     if not data or not all(k in data for k in ("name", "code", "credits")):
@@ -40,36 +30,18 @@ def add_courses():
 
     db.session.add(course)
     db.session.commit()
-    return make_response_json({
-        "id": course.id,
-        "name": course.name,
-        "code": course.code,
-        "credits": course.credits,
-        "department_id": course.department_id
-    }, 201)
+    return make_response_json(course.to_dict(), 201)
 
 
 @courses_bp.route('/<int:course_id>/', methods=['GET'])
 def get_course(course_id):
-    course = Course.query.get(course_id)
-    if not course:
-        return jsonify({"status": "error", "message": "course not found"}), 404
-
-    return make_response_json({
-        "id": course.id,
-        "name": course.name,
-        "code": course.code,
-        "credits": course.credits,
-        "department_id": course.department_id
-    }, 200)
+    course = Course.query.get_or_404(course_id)
+    return make_response_json(course.to_dict(), 200)
 
 
 @courses_bp.route('/<int:course_id>/', methods=['PUT'])
 def update_course(course_id):
-    course = Course.query.get(course_id)
-    if not course:
-        return jsonify({"status": "error", "message": "course not found"}), 404
-
+    course = Course.query.get_or_404(course_id)
     data = request.get_json()
     if not data:
         return jsonify({"status": "error", "message": "request body is required"}), 400
@@ -80,21 +52,20 @@ def update_course(course_id):
     course.department_id = data.get("department_id", course.department_id)
 
     db.session.commit()
-    return make_response_json({
-        "id": course.id,
-        "name": course.name,
-        "code": course.code,
-        "credits": course.credits,
-        "department_id": course.department_id
-    }, 200)
+    return make_response_json(course.to_dict(), 200)
 
 
 @courses_bp.route('/<int:course_id>/', methods=['DELETE'])
 def delete_course(course_id):
-    course = Course.query.get(course_id)
-    if not course:
-        return jsonify({"status": "error", "message": "course not found"}), 404
-
+    course = Course.query.get_or_404(course_id)
     db.session.delete(course)
     db.session.commit()
     return make_response_json(None, 200)
+
+
+@courses_bp.route('/<int:course_id>/students/', methods=['GET'])
+def get_course_students(course_id):
+    course = Course.query.get_or_404(course_id)
+    enrollments = Enrollment.query.filter_by(course_id=course.id).all()
+    students = [enrollment.student.to_dict() for enrollment in enrollments]
+    return make_response_json(students, 200)

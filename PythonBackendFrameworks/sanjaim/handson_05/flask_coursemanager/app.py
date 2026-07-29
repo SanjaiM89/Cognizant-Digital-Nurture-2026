@@ -1,16 +1,19 @@
 from flask import Flask, jsonify
+from flask_migrate import Migrate
 from config import config
 from courses.routes import courses_bp
 from courses.models import db
+
+migrate = Migrate()
+
+
 def create_app():
     app = Flask(__name__)
 
     app.config.from_object(config)
     db.init_app(app)
+    migrate.init_app(app, db)
     app.register_blueprint(courses_bp)
-
-    with app.app_context():
-        db.create_all()
 
     @app.errorhandler(404)
     def not_found(error):

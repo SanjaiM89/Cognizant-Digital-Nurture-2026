@@ -15,10 +15,10 @@ class Department(db.Model):
 
 
 class Course(db.Model):
-    __tablename__ = "courses_course"
+    __tablename__ = "courses"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
     code = db.Column(db.String(7), unique=True)
     credits = db.Column(db.Integer)
-    department_id = db.Column(db.Integer, db.ForeignKey("department.id"))
+    department_id = db.Column(db.Integer, db.ForeignKey("departments.id"))
