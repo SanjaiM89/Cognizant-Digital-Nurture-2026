@@ -119,7 +119,7 @@ async def create_course(course: CourseCreate, response: Response, db: AsyncSessi
     db.add(new_course)
     await db.commit()
     await db.refresh(new_course)
-    response.headers['Location'] = f'/api/courses/{new_course.id}/'
+    response.headers['Location'] = f'/api/v1/courses/{new_course.id}/'
     return new_course
 
 
@@ -212,23 +212,23 @@ async def get_course_students(course_id: int, db: AsyncSession = Depends(get_db)
 
 
 
-@app.post('/api/students/', response_model=StudentResponse, status_code=status.HTTP_201_CREATED, tags=['Students'])
+@app.post('/api/v1/students/', response_model=StudentResponse, status_code=status.HTTP_201_CREATED, tags=['Students'])
 async def create_student(student: StudentCreate, response: Response, db: AsyncSession = Depends(get_db)):
     new_student = Student(**student.model_dump())
     db.add(new_student)
     await db.commit()
     await db.refresh(new_student)
-    response.headers['Location'] = f'/api/students/{new_student.id}/'
+    response.headers['Location'] = f'/api/v1/students/{new_student.id}/'
     return new_student
 
 
-@app.get('/api/students/', response_model=List[StudentResponse], tags=['Students'])
+@app.get('/api/v1/students/', response_model=List[StudentResponse], tags=['Students'])
 async def list_students(db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Student))
     return result.scalars().all()
 
 
-@app.get('/api/students/{student_id}', response_model=StudentResponse, tags=['Students'])
+@app.get('/api/v1/students/{student_id}', response_model=StudentResponse, tags=['Students'])
 async def get_student(student_id: int, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Student).where(Student.id == student_id))
     student = result.scalar_one_or_none()
@@ -237,7 +237,7 @@ async def get_student(student_id: int, db: AsyncSession = Depends(get_db)):
     return student
 
 
-@app.put('/api/students/{student_id}', response_model=StudentResponse, tags=['Students'])
+@app.put('/api/v1/students/{student_id}', response_model=StudentResponse, tags=['Students'])
 async def update_student(student_id: int, student_update: StudentUpdate, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Student).where(Student.id == student_id))
     student = result.scalar_one_or_none()
@@ -252,7 +252,7 @@ async def update_student(student_id: int, student_update: StudentUpdate, db: Asy
     return student
 
 
-@app.delete('/api/students/{student_id}', status_code=status.HTTP_204_NO_CONTENT, tags=['Students'])
+@app.delete('/api/v1/students/{student_id}', status_code=status.HTTP_204_NO_CONTENT, tags=['Students'])
 async def delete_student(student_id: int, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Student).where(Student.id == student_id))
     student = result.scalar_one_or_none()
@@ -265,7 +265,7 @@ async def delete_student(student_id: int, db: AsyncSession = Depends(get_db)):
 
 # Enrollments
 
-@app.post('/api/enrollments/', response_model=EnrollmentResponse, status_code=status.HTTP_201_CREATED, tags=['Enrollments'])
+@app.post('/api/v1/enrollments/', response_model=EnrollmentResponse, status_code=status.HTTP_201_CREATED, tags=['Enrollments'])
 async def create_enrollment(
     enrollment: EnrollmentCreate,
     background_tasks: BackgroundTasks,
@@ -286,18 +286,18 @@ async def create_enrollment(
     await db.commit()
     await db.refresh(new_enrollment)
 
-    response.headers['Location'] = f'/api/enrollments/{new_enrollment.id}/'
+    response.headers['Location'] = f'/api/v1/enrollments/{new_enrollment.id}/'
     background_tasks.add_task(send_confirmation_email, student.email)
     return new_enrollment
 
 
-@app.get('/api/enrollments/', response_model=List[EnrollmentResponse], tags=['Enrollments'])
+@app.get('/api/v1/enrollments/', response_model=List[EnrollmentResponse], tags=['Enrollments'])
 async def list_enrollments(db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Enrollment))
     return result.scalars().all()
 
 
-@app.get('/api/enrollments/{enrollment_id}', response_model=EnrollmentResponse, tags=['Enrollments'])
+@app.get('/api/v1/enrollments/{enrollment_id}', response_model=EnrollmentResponse, tags=['Enrollments'])
 async def get_enrollment(enrollment_id: int, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Enrollment).where(Enrollment.id == enrollment_id))
     enrollment = result.scalar_one_or_none()
@@ -306,7 +306,7 @@ async def get_enrollment(enrollment_id: int, db: AsyncSession = Depends(get_db))
     return enrollment
 
 
-@app.delete('/api/enrollments/{enrollment_id}', status_code=status.HTTP_204_NO_CONTENT, tags=['Enrollments'])
+@app.delete('/api/v1/enrollments/{enrollment_id}', status_code=status.HTTP_204_NO_CONTENT, tags=['Enrollments'])
 async def delete_enrollment(enrollment_id: int, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Enrollment).where(Enrollment.id == enrollment_id))
     enrollment = result.scalar_one_or_none()
